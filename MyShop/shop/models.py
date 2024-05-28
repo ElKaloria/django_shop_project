@@ -1,6 +1,11 @@
+import io
+import sys
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.urls import reverse
-
+from PIL import Image
+from django.core.files import File
 # Create your models here.
 
 
@@ -47,3 +52,16 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.id, self.slug])
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            im = Image.open(self.image)
+            im = im.resize((400, 300), Image.LANCZOS)
+            output = io.BytesIO()
+            im.save(output, format='JPEG', quality=75)
+            output.seek(0)
+            self.image = InMemoryUploadedFile(output, 'ImageField', self.image.name,
+                                              'image/jpeg', sys.getsizeof(output), None)
+
+        super(Product, self).save(*args, **kwargs)
+
