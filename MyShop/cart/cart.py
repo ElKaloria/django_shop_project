@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.conf import settings
-from MyShop.shop.models import Product
+from shop.models import Product
 
 
 class Cart:
