@@ -17,7 +17,7 @@
         <p class="price">{{ product.price }} ₽</p>
         <p>{{ product.description|linebreaks }}</p>
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
-            {{ cart_product_form.as_p }}
+            {{ cart_product_form }}
             {% csrf_token %}
             <input type="submit" value="Добавить в корзину">
         </form>
