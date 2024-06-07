@@ -5,6 +5,7 @@ from .forms import OrderCreateForm
 
 
 # Create your views here.
+from .tasks import order_created
 
 
 def create_order(request):
@@ -19,9 +20,10 @@ def create_order(request):
                                          price=item['price'],
                                          quantity=item['quantity'])
             cart.clear()
-            return render(request, 'orders/order/created.html', {'order': order})
+            order_created.delay(order.id)
+            return render(request, 'orders/created.html', {'order': order})
 
     else:
         form = OrderCreateForm
-    return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
+    return render(request, 'orders/create.html', {'cart': cart, 'form': form})
 
