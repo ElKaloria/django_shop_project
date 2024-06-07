@@ -7,7 +7,8 @@ services:
     command: >
       sh -c "python manage.py makemigrations &&
       python manage.py migrate && 
-      python manage.py runserver 0.0.0.0:8000"
+      python manage.py runserver 0.0.0.0:8000 &&
+      celery worker -A MyShop -l INFO"
     volumes:
       - .:/app
     ports:
@@ -69,6 +70,35 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    depends_on:
+      - web
+
+  celery:
+    build:
+      context: .
+    container_name: celery_container
+    command: celery -A MyShop worker -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - web
+      - rabbitmq
+
+  flower:
+    build:
+      context: .
+    container_name: flower_container
+    command: celery -A MyShop flower
+    env_file:
+      - ./.env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - web
+      - celery
+      - rabbitmq
 
 volumes:
   postgres_data:
