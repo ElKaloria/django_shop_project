@@ -30,6 +30,13 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 CART_SESSION_ID = 'cart'
 
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT'))
+EMAIL_USE_TLS = True
 # Application definition
 
 INSTALLED_APPS = [
