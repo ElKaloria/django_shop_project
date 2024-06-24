@@ -8,6 +8,11 @@
   </head>
   <body>
     <div id="header">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">Выход</a>
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a>
+        {% endif %}
       <a href="/" class="logo">My shop</a>
     </div>
     <div id="subheader">
