@@ -22,6 +22,7 @@ from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 from shop.api.urls import router as shop_router
 from orders.api.urls import router as order_router
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 
 router = DefaultRouter()
@@ -34,6 +35,9 @@ urlpatterns = [
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('shop/', include('shop.urls', namespace='shop')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/', include(router.urls)),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
